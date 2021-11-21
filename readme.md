@@ -8,7 +8,11 @@ Credits: [Saber Ali](https://dribbble.com/saberali) - Dribble
 
 ## Design
 
-![Design travel app ui](https://raw.githubusercontent.com/bolhy91/TravelAppUI/main/design/design.jpg)
+* ##### Home Screen
+![Design travel app ui](https://raw.githubusercontent.com/bolhy91/FoodDeliveryAppUI/main/design/home.jpg)
+
+* ##### Detail Screen
+![Design travel app ui](https://raw.githubusercontent.com/bolhy91/FoodDeliveryAppUI/main/design/detail.jpg)
 
 ### Contact
 * email: bolhy91@gmail.com
