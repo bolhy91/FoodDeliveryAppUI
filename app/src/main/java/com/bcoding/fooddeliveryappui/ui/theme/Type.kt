@@ -40,6 +40,12 @@ val Typography = Typography(
         fontSize = 14.sp
     ),
 
+    body2 = TextStyle(
+        fontFamily = gilroy,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    ),
+
     subtitle1 = TextStyle(
         fontFamily = gilroy,
         fontWeight = FontWeight.Bold,

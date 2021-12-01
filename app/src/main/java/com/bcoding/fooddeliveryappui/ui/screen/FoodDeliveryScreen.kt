@@ -17,41 +17,42 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.bcoding.fooddeliveryappui.*
 import com.bcoding.fooddeliveryappui.R
+import com.bcoding.fooddeliveryappui.ui.screen.components.BaseLayoutScreen
 import com.bcoding.fooddeliveryappui.ui.theme.*
 
 @Composable
-fun FoodDeliveryScreen() {
-    FoodDeliveryAppUITheme {
-        Box(
+fun FoodDeliveryScreen(
+    onItemClick: (String) -> Unit,
+    selectedItemIndexMenu: MutableState<Int>,
+    navController: NavHostController
+) {
+    BaseLayoutScreen(
+        navController = navController,
+        selectedItemIndexMenu = selectedItemIndexMenu
+    ) {
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background)
+                .padding(
+                    start = 15.dp,
+                    top = 25.dp,
+                    bottom = 15.dp,
+                    end = 15.dp
+                )
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(
-                        start = 15.dp,
-                        top = 25.dp,
-                        bottom = 15.dp,
-                        end = 15.dp
-                    )
-            ) {
-                TopBarSection()
-                SearchSection()
-                Spacer(height = 30)
-                SectionCategoryListHorizontal()
-                Spacer(height = 30)
-                SectionCardFood()
-            }
-            SectionMenuBottom(
-                items = menuItems,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
+            TopBarSection()
+            SearchSection()
+            Spacer(height = 30)
+            SectionCategoryListHorizontal()
+            Spacer(height = 30)
+            SectionCardFood(onItemClick)
         }
     }
 }
@@ -175,24 +176,31 @@ fun CategoryTitle(category: Any, isSelected: Boolean, modifier: Modifier) {
 }
 
 @Composable
-fun SectionCardFood() {
+fun SectionCardFood(
+    onItemClick: (String) -> Unit,
+) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         items(foods) { item: Food ->
-            FoodItemForCard(item)
+            var checkFavorite by remember { mutableStateOf(false) }
+            FoodItemForCard(item, onItemClick, checkFavorite, { checkFavorite = !checkFavorite })
         }
     }
 }
 
 @Composable
-fun FoodItemForCard(food: Food) {
+fun FoodItemForCard(
+    food: Food,
+    onItemClick: (String) -> Unit,
+    favorite: Boolean,
+    checkFavorite: () -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(10.dp)
-            .shadow(10.dp, RoundedCornerShape(30.dp), true)
-            .clickable { },
+            .shadow(10.dp, RoundedCornerShape(30.dp), true),
         elevation = 10.dp
     ) {
         Column(
@@ -203,8 +211,13 @@ fun FoodItemForCard(food: Food) {
                 painter = painterResource(id = R.drawable.ic_heart),
                 contentDescription = "heart",
                 modifier = Modifier
-                    .align(Alignment.End),
-                tint = heartColor
+                    .align(Alignment.End)
+                    .clickable { checkFavorite() },
+                tint = if (favorite) {
+                    heartColor
+                } else {
+                    colorGray
+                }
             )
             Image(
                 painter = painterResource(id = food.image),
@@ -213,13 +226,19 @@ fun FoodItemForCard(food: Food) {
                     .width(142.dp)
                     .height(142.dp)
                     .align(Alignment.CenterHorizontally)
+                    .clickable {
+                        onItemClick(food.id.toString())
+                    }
             )
             Spacer(height = 10)
             Text(text = food.title, style = MaterialTheme.typography.subtitle2)
             Spacer(height = 10)
             Text(
                 text = food.description,
-                style = MaterialTheme.typography.body1.copy(fontSize = 10.sp)
+                style = MaterialTheme.typography.body1.copy(fontSize = 10.sp),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
+                modifier = Modifier.width(142.dp)
             )
             Spacer(height = 10)
             Text(
@@ -233,59 +252,4 @@ fun FoodItemForCard(food: Food) {
 @Composable
 fun Spacer(height: Int) {
     Spacer(modifier = Modifier.height(height.dp))
-}
-
-@Composable
-fun SectionMenuBottom(
-    items: List<Menu>,
-    initialSelectedItemIndex: Int = 0,
-    modifier: Modifier = Modifier
-) {
-    var selectedItemIndexMenu by remember { mutableStateOf(initialSelectedItemIndex) }
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(15.dp)
-            .clip(shape = RoundedCornerShape(20.dp))
-            .background(colorBlack)
-    ) {
-        items.forEachIndexed { index, menu ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .padding(15.dp)
-                    .clickable {
-                        selectedItemIndexMenu = index
-                    }
-            ) {
-                Icon(
-                    painter = painterResource(id = menu.icon),
-                    contentDescription = menu.title + index,
-                    tint = if (index == selectedItemIndexMenu) {
-                        Color.White
-                    } else {
-                        white700
-                    },
-                )
-                Text(
-                    text = menu.title,
-                    style = if (index == selectedItemIndexMenu) {
-                        MaterialTheme.typography.subtitle2
-                    } else {
-                        MaterialTheme.typography.body1
-                    },
-                    color = Color.White,
-                )
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FoodDeliveryPreview() {
-    FoodDeliveryScreen()
 }
