@@ -25,4 +25,9 @@ class ExampleUnitTest {
         assertEquals(4, 2 * 2)
     }
 
+    @Test
+    fun division_isCorrect() {
+        assertEquals(2, 4 / 2)
+    }
+
 }
