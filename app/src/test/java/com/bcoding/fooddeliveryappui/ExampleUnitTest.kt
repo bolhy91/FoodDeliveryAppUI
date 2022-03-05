@@ -30,4 +30,9 @@ class ExampleUnitTest {
         assertEquals(2, 4 / 2)
     }
 
+    @Test
+    fun addition_isSumCorrect() {
+        assertEquals(6, 4 + 2)
+    }
+
 }
