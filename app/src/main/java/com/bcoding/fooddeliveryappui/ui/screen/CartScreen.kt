@@ -8,9 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import com.bcoding.fooddeliveryappui.ui.screen.components.BaseLayoutScreen
 
+/**
+ * Cart Screen
+ * @param navController
+ * @param selectedItemIndexMenu
+ * @return void
+ */
 @Composable
 fun CartScreen(
     navController: NavHostController,
@@ -27,7 +34,8 @@ fun CartScreen(
         ) {
             Text(
                 text = "Cart",
-                style = MaterialTheme.typography.h4
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.testTag("textCartScreen")
             )
         }
     }
