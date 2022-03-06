@@ -15,11 +15,19 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * Test Unit CartScreen
+ */
 @RunWith(AndroidJUnit4::class)
 class CartScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    /**
+     * Test CartScreen
+     * @return void
+     */
     @Test
     fun useTextCartScreen() {
         val selectedItemIndexMenu = mutableStateOf(1)
